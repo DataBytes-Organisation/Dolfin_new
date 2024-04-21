@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Dolfin_new project was established to better commercialise Dolfin. It adopts a classic three-layer structure and uses docker containerised applications. Its frontend uses the react framework and is powered by Nginx. The backend uses the Flask framework and the database uses MongoDB. (For more details see architecture.png)
+The Dolfin_new project was established to better commercialise Dolfin. It adopts a classic three-layer structure and uses docker containerised applications. Its frontend uses the react framework and is powered by Nginx. The backend uses the Flask framework and the database uses MongoDB. (For more details see architecture.jpg)
 
 ## Deploy the project using docker
 

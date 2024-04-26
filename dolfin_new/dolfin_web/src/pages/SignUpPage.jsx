@@ -48,6 +48,7 @@ export default function SignUpPage() {
       firstname: data.get("firstName"),
       lastname: data.get("lastName"),
       email: data.get("email"),
+      phone:data.get("phone"),
       password: data.get("password"),
     });
 
@@ -113,6 +114,16 @@ export default function SignUpPage() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="phone"
+                  label="Phone"
+                  name="phone"
+                  autoComplete="phone"
                 />
               </Grid>
               <Grid item xs={12}>

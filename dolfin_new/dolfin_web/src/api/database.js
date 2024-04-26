@@ -5,6 +5,7 @@ export const createNewUser = async (formData) => {
   let firstName = formData.get("firstName")?.trim() ?? "";
   let lastName = formData.get("lastName")?.trim() ?? "";
   let email = formData.get("email")?.trim() ?? null;
+  let phone = formData.get("phone")?.trim() ?? "";
   let password = formData.get("password")?.trim() ?? "";
   let confirmPassword = formData.get("confirmPassword")?.trim() ?? "";
 
@@ -15,7 +16,7 @@ export const createNewUser = async (formData) => {
     };
   }
 
-  if (!firstName || !lastName || !email || !password) {
+  if (!firstName || !lastName || !email || !password||!phone) {
     return { success: false, message: "Please complete all information." };
   }
   let apiUrl = `${baseUrl}/create_new_user`;
@@ -30,6 +31,7 @@ export const createNewUser = async (formData) => {
         firstName,
         lastName,
         email,
+        phone,
         password,
       }),
     });
@@ -84,3 +86,5 @@ export const loginWithEmail = async (formData) => {
     return { success: false, message: `Error: ${error.message}` };
   }
 };
+
+

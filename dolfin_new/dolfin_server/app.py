@@ -20,7 +20,7 @@ api_data_instance = API_Data()
 access_token = api_core_instance.generate_auth_token()
 
 
-@app.route('/create_new_user', methods=['POST'])
+@app.route('/api/create_new_user', methods=['POST'])
 def create_new_user():
     data = request.get_json()
     user = db.find_user_by_email(data['email'])
@@ -43,7 +43,7 @@ def create_new_user():
     return jsonify({'success': True, 'message': 'User created successfully.'}), 201
 
 
-@app.route('/login_with_email', methods=['POST'])
+@app.route('/api/login_with_email', methods=['POST'])
 def login_with_email():
     data = request.get_json()
     user = db.find_user_by_email(data['email'])

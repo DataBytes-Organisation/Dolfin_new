@@ -1,5 +1,5 @@
 const baseUrl =
-  process.env.REACT_APP_USER_SERVER_API_URL || "http://localhost:5000";
+  process.env.NODE_ENV === "development" ? "http://localhost:5000/api" : "/api";
 
 export const createNewUser = async (formData) => {
   let firstName = formData.get("firstName")?.trim() ?? "";
@@ -16,7 +16,7 @@ export const createNewUser = async (formData) => {
     };
   }
 
-  if (!firstName || !lastName || !email || !password||!phone) {
+  if (!firstName || !lastName || !email || !password || !phone) {
     return { success: false, message: "Please complete all information." };
   }
   let apiUrl = `${baseUrl}/create_new_user`;
@@ -86,5 +86,3 @@ export const loginWithEmail = async (formData) => {
     return { success: false, message: `Error: ${error.message}` };
   }
 };
-
-

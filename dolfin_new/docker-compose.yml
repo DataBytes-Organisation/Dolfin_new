@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  mongodb:
+  database:
     image: mongo
     volumes:
       - mongodb_data:/data/db
@@ -13,17 +13,16 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017/
+      - MONGODB_URI=mongodb://database:27017/
+      - API_KEY = ZGJmYmY0MjUtNjE3MS00MWVjLWEyMmItMzBhYTliMmQ4OGQyOjhlOTYwNTM0LTI1OGItNGUzMC1hOWViLWY2OGM0MjdlMjg0ZA==
     depends_on:
-      - mongodb
+      - database
   frontend:
     build:
       context: ./dolfin_web
       dockerfile: Dockerfile.frontend
     ports:
       - "80:80"
-    environment:
-      - REACT_APP_API_URL=http://backend:5000
     depends_on:
       - backend
 

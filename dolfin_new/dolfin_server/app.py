@@ -20,6 +20,11 @@ api_data_instance = API_Data()
 access_token = api_core_instance.generate_auth_token()
 
 
+@app.route('/')
+def welcome():
+    return '<h1>This is Dolfin server!</h1>'
+
+
 @app.route('/api/create_new_user', methods=['POST'])
 def create_new_user():
     data = request.get_json()
@@ -63,4 +68,4 @@ def login_with_email():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8080)

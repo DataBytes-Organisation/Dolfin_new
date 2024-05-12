@@ -1,5 +1,5 @@
 const baseUrl =
-  process.env.NODE_ENV === "development" ? "http://localhost:5000/api" : "/api";
+  process.env.NODE_ENV === "development" ? "http://localhost:8080/api" : "/api";
 
 export const createNewUser = async (formData) => {
   let firstName = formData.get("firstName")?.trim() ?? "";

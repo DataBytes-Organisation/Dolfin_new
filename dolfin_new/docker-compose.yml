@@ -11,7 +11,7 @@ services:
       context: ./dolfin_server
       dockerfile: Dockerfile.backend
     ports:
-      - "5000:5000"
+      - "8080:8080"
     environment:
       - MONGODB_URI=mongodb://database:27017/
       - API_KEY = ZGJmYmY0MjUtNjE3MS00MWVjLWEyMmItMzBhYTliMmQ4OGQyOjhlOTYwNTM0LTI1OGItNGUzMC1hOWViLWY2OGM0MjdlMjg0ZA==

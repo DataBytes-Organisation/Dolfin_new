@@ -7,39 +7,55 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import { BarChart } from '@mui/x-charts/BarChart';
-import { axisClasses } from '@mui/x-charts';
+import { BarChart } from "@mui/x-charts/BarChart";
+import { axisClasses } from "@mui/x-charts";
+import { updateUserIncomeAndExpenditure } from "../api/database";
+import { useContext } from "react";
+import { UserContext } from "../context/user.context";
+import { useEffect } from "react";
 const TransactionStatistics = () => {
-    const chartSetting = {
-        yAxis: [
-          {
-            label: 'amount (AUD)',
-          },
-        ],
-        width: 700,
-        height: 250,
-        sx: {
-          [`.${axisClasses.left} .${axisClasses.label}`]: {
-            transform: 'translate(-20px, 0)',
-          },
-        },
-      };
-      const generateMonthlyFinance = () => {
-        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const finances = months.map(month => {
-          const income = Math.floor(Math.random() * 100) + 50;  
-          const expenditure = Math.floor(Math.random() * 50) + 30;  
-          return {
-            month,
-            income,
-            expenditure
-          };
-        });
-        return finances;
-      };
-      const dataset = generateMonthlyFinance();
-      
-      const valueFormatter = (value) => `${value}AUD`;
+  const { currentUser } = useContext(UserContext);
+  const [dataset, setDataset] = React.useState([]);
+  const chartSetting = {
+    yAxis: [
+      {
+        label: "amount (AUD)",
+      },
+    ],
+    width: 700,
+    height: 250,
+    sx: {
+      [`.${axisClasses.left} .${axisClasses.label}`]: {
+        transform: "translate(-20px, 0)",
+      },
+    },
+  };
+
+  const handleRefresh = async () => {
+    const response = await updateUserIncomeAndExpenditure(
+      currentUser.email,
+      currentUser.jwt
+    );
+    if (response.success) {
+      setDataset(response.data);
+      console.log(response.data);
+    }
+  
+  };
+  useEffect(() => {
+    const fetchIncomeAndExpenditure = async () => {
+      const response = await updateUserIncomeAndExpenditure(
+        currentUser.email,
+        currentUser.jwt
+      );
+      if (response.success) {
+        setDataset(response.data);
+      }
+    };
+    fetchIncomeAndExpenditure();
+  }, [currentUser.email, currentUser.jwt]);
+
+  const valueFormatter = (value) => `${value}AUD`;
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardHeader
@@ -57,19 +73,23 @@ const TransactionStatistics = () => {
           </Typography>
         }
       />
-      <CardContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <BarChart
-      dataset={dataset}
-      xAxis={[{ scaleType: 'band', dataKey: 'month' }]}
-      series={[
-        { dataKey: 'income', label: 'Income', valueFormatter },
-        { dataKey: 'expenditure', label: 'Expenditure', valueFormatter },
-      ]}
-      {...chartSetting}
-    />
+      <CardContent
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        <BarChart
+          dataset={dataset}
+          xAxis={[{ scaleType: "band", dataKey: "year_month" }]}
+          series={[
+            { dataKey: "Income", label: "Income", valueFormatter },
+            { dataKey: "Expenditure", label: "Expenditure", valueFormatter },
+          ]}
+          {...chartSetting}
+        />
       </CardContent>
       <CardActions>
-        <Button size="small">Refresh</Button>
+        <Button size="small" onClick={handleRefresh}>
+          Refresh
+        </Button>
       </CardActions>
     </Card>
   );

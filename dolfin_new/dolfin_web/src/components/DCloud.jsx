@@ -7,14 +7,37 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import CardActions from "@mui/material/CardActions";
-import wordCloudImage from "../assets/images/word_cloud.png";
-
+import { useEffect } from "react";
+import { useContext } from "react";
+import { UserContext } from "../context/user.context";
+import { updateUserDCloud } from "../api/database";
 const DCloud = () => {
-  const data = [
-    { id: 0, value: 10, label: "Low Level" },
-    { id: 1, value: 15, label: "Medium Level" },
-    { id: 2, value: 20, label: "High Level" },
-  ];
+  const { currentUser } = useContext(UserContext);
+  const [dataset,setDataset]=React.useState([]);
+  const [cloudImage,setCloudImage]=React.useState();
+  useEffect(() => {
+    const fetchDCloud = async () => {
+      const response = await updateUserDCloud(
+        currentUser.email,
+        currentUser.jwt
+      );
+      if (response.success) {
+        setDataset(response.cluster);
+        setCloudImage(response.image)
+      }
+    };
+    fetchDCloud();
+  },[currentUser.email, currentUser.jwt]);
+  const handleRefresh=async()=>{
+    const response = await updateUserDCloud(
+      currentUser.email,
+      currentUser.jwt
+    );
+    if (response.success) {
+      setDataset(response.cluster);
+      setCloudImage(response.image)
+    }
+  }
   return (
     <>
       <Card sx={{ minWidth: 275 }}>
@@ -32,7 +55,6 @@ const DCloud = () => {
               D-Cloud
             </Typography>
           }
-          subheader="Current Mode: Amount"
         />
         <CardContent>
         <Box display="flex" justifyContent="space-around" alignItems="center" p={2}>
@@ -40,7 +62,7 @@ const DCloud = () => {
         <PieChart
           series={[
             {
-              data,
+              data:dataset,
               highlightScope: { faded: "global", highlighted: "item" },
               faded: {
                 innerRadius: 30,
@@ -53,16 +75,13 @@ const DCloud = () => {
         />
       </Box>
       <Box sx={{ flexBasis: '50%', p: 1,  overflow: 'hidden' }}>
-        <img src={wordCloudImage} alt="Description" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <img src={cloudImage} alt="Description" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </Box>
     </Box>
         </CardContent>
         <CardActions>
-        <Button  color="primary">
-            Amount
-          </Button>
-          <Button  color="primary">
-            Frequence
+        <Button  color="primary" onClick={handleRefresh}>
+            Fresh
           </Button>
         </CardActions>
       </Card>

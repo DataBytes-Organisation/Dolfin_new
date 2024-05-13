@@ -86,3 +86,169 @@ export const loginWithEmail = async (formData) => {
     return { success: false, message: `Error: ${error.message}` };
   }
 };
+
+export const updateUserRFWScore = async (email, score, token) => {
+  let updateUserRFWScoreUrl = `${baseUrl}/update_user_rfw`;
+
+  try {
+    const response = await fetch(updateUserRFWScoreUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        email,
+        score,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Failed to update your score");
+    }
+    return {
+      success: true,
+      message: "Managed to update your score",
+    };
+  } catch (error) {
+    return { success: false, message: `Error: ${error.message}` };
+  }
+};
+
+export const updateUserIncomeAndExpenditure = async (email, token) => {
+  let updateUserIncomeAndExpenditureUrl = `${baseUrl}/update_user_income_and_expenditure`;
+
+  try {
+    const response = await fetch(updateUserIncomeAndExpenditureUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        email,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.error || "Failed to update your income and expenditure"
+      );
+    }
+    const convertedData = JSON.parse(data.data_set).map((item) => ({
+      ...item,
+      Income: parseFloat(item.Income),
+      Expenditure: parseFloat(item.Expenditure),
+    }));
+    return {
+      success: true,
+      message: "Managed to update your income and expenditure",
+      data: convertedData,
+    };
+  } catch (error) {
+    return { success: false, message: `Error: ${error.message}` };
+  }
+};
+
+export const updateUserDCloud = async (email, token) => {
+  let updateUserDCloudUrl = `${baseUrl}/update_user_d_cloud`;
+
+  try {
+    const response = await fetch(updateUserDCloudUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        email,
+      }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(
+        data.error || "Failed to update your income and expenditure"
+      );
+    }
+
+    return {
+      success: true,
+      message: "Managed to update your income and expenditure",
+      cluster: data.cluster,
+      image: `data:image/jpeg;base64,${data.image}`,
+    };
+  } catch (error) {
+    return { success: false, message: `Error: ${error.message}` };
+  }
+};
+
+export const linkToBankAccount=async(email)=>{
+  let linkToBankAccountUrl = `${baseUrl}/link_to_bank`;
+  try {
+    const response = await fetch(linkToBankAccountUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.error || "Failed to link to bank account"
+      );
+    }
+
+    return {
+      success: true,
+      message: "Auth link returned",
+      data: data.link,
+    };
+  } catch (error) {
+    return { success: false, message: `Error: ${error.message}` };
+  }
+}
+
+export const getUserRFWScore=async(email,token)=>{
+  let getUserRFWScoreUrl = `${baseUrl}/get_user_rfw_score`;
+  try {
+    const response = await fetch(getUserRFWScoreUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        email,
+        token
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.error || "Failed to get rfw score"
+      );
+    }
+
+    return {
+      success: true,
+      message: "Managed to get rfw score",
+      data: data.score,
+    };
+  } catch (error) {
+    return { success: false, message: `Error: ${error.message}` };
+  }
+}
+
+

@@ -122,6 +122,7 @@ function NavBar(props) {
     navigate("/qa");
   };
   const handleSignOut = () => {
+    navigate("/");
     setCurrentUser(null);
     handleCloseUserMenu();
   };

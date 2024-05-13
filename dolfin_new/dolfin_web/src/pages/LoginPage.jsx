@@ -38,11 +38,11 @@ const defaultTheme = createTheme();
 
 export default function LoginPage() {
   const { setCurrentUser } = useContext(UserContext);
-  const [open, setOpen] = React.useState(false);
+  const [openSnackBar, setOpenSnackBar] = React.useState(false);
   const [message, setMessage] = React.useState("");
   let navigate = useNavigate();
   const handleClose = () => {
-    setOpen(false);
+    setOpenSnackBar(false);
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -54,7 +54,7 @@ export default function LoginPage() {
       console.log(response.data)
     } else {
       setMessage(`${response.message}`);
-      setOpen(true);
+      setOpenSnackBar(true);
     }
   };
 
@@ -158,7 +158,7 @@ export default function LoginPage() {
         </Grid>
       </Grid>
       <Snackbar
-        open={open}
+        open={openSnackBar}
         closeFunc={handleClose}
         message={message}
         onClose={handleClose}

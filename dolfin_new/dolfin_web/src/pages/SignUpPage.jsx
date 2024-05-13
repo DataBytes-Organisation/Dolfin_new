@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { createNewUser } from "../api/database";
 import { useNavigate } from "react-router-dom";
 import Snackbar from "../components/Snackbar";
+import { linkToBankAccount } from "../api/database";
 function Copyright(props) {
   return (
     <Typography
@@ -55,6 +56,10 @@ export default function SignUpPage() {
     const response = await createNewUser(data);
     setMessage(response.message);
     if (response.success) {
+      const authResponse=await linkToBankAccount(data.get('email'))
+      if(authResponse.success){
+        window.open(authResponse.data);
+      }
       navigate("/login");
     }else{
       setMessage(`${response.message}`);
